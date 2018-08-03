@@ -1,0 +1,11 @@
+GLEW/
+GLFW/
+Debug/
+Release/
+GLApplication.sdf
+GLApplication.v12.suo
+
+#Project Directory "GLApp"
+GLApp/Debug/
+GLApp/Release/
+GLApp/GLApp.vcxproj.user
