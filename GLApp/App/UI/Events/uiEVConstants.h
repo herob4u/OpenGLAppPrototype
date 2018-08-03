@@ -19,6 +19,7 @@ namespace uiEV
 
 		KeyPress,
 		KeyRelease,
+		KeyRepeat
 	};
 
 	enum class EMouseMask : uint8_t

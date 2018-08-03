@@ -12,7 +12,8 @@ static const char* EventTypeNames[] =
 	"MouseWheel",
 
 	"KeyPress",
-	"KeyRelease"
+	"KeyRelease",
+	"KeyRepeat"
 };
 
 static const char* MouseMaskNames[] =

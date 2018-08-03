@@ -17,6 +17,9 @@ MouseEvent::MouseEvent(EEventType _evType, EMouseMask _mouseMask, const Geom2D::
 }
 
 MouseEvent::MouseEvent(const MouseEvent& other)
+	: Event(other.GetEventType())
+	, mouseMask(other.GetMouseMask())
+	, cursorPos(other.GetCursorPos())
 {
 	assert(false);
 }

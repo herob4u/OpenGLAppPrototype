@@ -4,9 +4,6 @@
     <ClCompile Include="App\main.cpp">
       <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="App\UI\Window\GLWindow.cpp">
-      <Filter>App\UI\Window</Filter>
-    </ClCompile>
     <ClCompile Include="App\UI\Events\uiEVEvent.cpp">
       <Filter>App\UI\Events</Filter>
     </ClCompile>
@@ -18,6 +15,15 @@
     </ClCompile>
     <ClCompile Include="App\UI\Events\uiEVKeyEvent.cpp">
       <Filter>App\UI\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="App\UI\Events\uiEventTranslator.cpp">
+      <Filter>App\UI\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="App\UI\Window\uiWinGLWindow.cpp">
+      <Filter>App\UI\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="App\UI\Window\uiWinManager.cpp">
+      <Filter>App\UI\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,9 +64,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App\UI\Window\GLWindow.h">
-      <Filter>App\UI\Window</Filter>
-    </ClInclude>
     <ClInclude Include="App\UI\Events\uiEVEvent.h">
       <Filter>App\UI\Events</Filter>
     </ClInclude>
@@ -84,6 +87,15 @@
     </ClInclude>
     <ClInclude Include="App\UI\Geom\Geom2DFwd.h">
       <Filter>App\UI\Geom</Filter>
+    </ClInclude>
+    <ClInclude Include="App\UI\Events\uiEventTranslator.h">
+      <Filter>App\UI\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="App\UI\Window\uiWinGLWindow.h">
+      <Filter>App\UI\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="App\UI\Window\uiWinManager.h">
+      <Filter>App\UI\Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

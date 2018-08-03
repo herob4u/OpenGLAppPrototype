@@ -79,20 +79,24 @@
   <ItemGroup>
     <ClCompile Include="App\main.cpp" />
     <ClCompile Include="App\UI\Events\uiEVConstants.cpp" />
+    <ClCompile Include="App\UI\Events\uiEventTranslator.cpp" />
     <ClCompile Include="App\UI\Events\uiEVEvent.cpp" />
     <ClCompile Include="App\UI\Events\uiEVKeyEvent.cpp" />
     <ClCompile Include="App\UI\Events\uiEVMouseEvent.cpp" />
-    <ClCompile Include="App\UI\Window\GLWindow.cpp" />
+    <ClCompile Include="App\UI\Window\uiWinGLWindow.cpp" />
+    <ClCompile Include="App\UI\Window\uiWinManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\UI\Events\uiEVConstants.h" />
+    <ClInclude Include="App\UI\Events\uiEventTranslator.h" />
     <ClInclude Include="App\UI\Events\uiEVEvent.h" />
     <ClInclude Include="App\UI\Events\uiEVKeyEvent.h" />
     <ClInclude Include="App\UI\Events\uiEVMouseEvent.h" />
     <ClInclude Include="App\UI\Geom\Geom2DFwd.h" />
     <ClInclude Include="App\UI\Geom\Point.h" />
     <ClInclude Include="App\UI\Geom\Rectangle.h" />
-    <ClInclude Include="App\UI\Window\GLWindow.h" />
+    <ClInclude Include="App\UI\Window\uiWinGLWindow.h" />
+    <ClInclude Include="App\UI\Window\uiWinManager.h" />
     <ClInclude Include="App\Utils\EnumMacros.h" />
   </ItemGroup>
   <ItemGroup>

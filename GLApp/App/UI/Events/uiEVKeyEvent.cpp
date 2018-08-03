@@ -25,6 +25,9 @@ KeyEvent::KeyEvent(EEventType _evType, EKeyCode _keyCode, EKeyModifiersMask _mod
 }
 
 KeyEvent::KeyEvent(const KeyEvent& other)
+	: Event(other.GetEventType())
+	, keyCode(other.GetKeyCode())
+	, modifiersMask(other.GetModifiersMask())
 {
 	assert(false);
 }
