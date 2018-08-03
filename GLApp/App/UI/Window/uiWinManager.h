@@ -41,6 +41,13 @@ namespace uiWin
 		FullScreen	= 0x0,
 		Windowed	= 0x1
 	};
+
+	struct FWindowHandle
+	{
+		GLWindow Window;
+		GLFWwindow* const GlfwHandle;	// We should not be allowed to manipulate windows directly
+
+	};
 }
 
 
@@ -77,8 +84,53 @@ public:
 	*/
 	bool CreateSubWindow(GLFWwindow*, int, int);
 	bool CreateSubWindow(GLFWwindow*, int, int);
+
+	/*	Closes and Destroys a window of top of the stack
+	*	Returns if no windows exists.
+	*/
+	void PopWindow();
+
 private:
 	/* GLFW INTERFACE */
+
+	/*	==============================================
+	*				Window Event Handlers
+	*	==============================================*/
+
+	/*	Invoked when a window is being closed by the user. If the window is 
+	*	not in focus, the event is ignored
+	*
+	*	@Param GLFWwindow: The window being closed by the user
+	*/
+	void WindowClosedHandler(GLFWwindow*);
+
+	/*	Invoked when a window request its contents to be refreshed
+	*
+	*	@Param GLFWwindow: The window in need of refreshing
+	*/
+	void WindowRefreshHandler(GLFWwindow*);
+
+	/*	Invoked when the window is moved by the user
+	*
+	*	@Param GLFWwindow: The window being moved
+	*	@Param int: The new X-coordinate of the upper left corner of the window
+	*	@Param int: The new Y-coordinate of the upper left corner of the window
+	*/
+	void WindowMovedHandler(GLFWwindow*, int, int);
+
+	/*	Invoked when the window is resized by either the user or set size func
+	*
+	*	@Param GLFWwindow: The window being resized
+	*	@Param int: New width of window in screen coordinates
+	*	@Param int: New height of window in screen coordinates
+	*/
+	void WindowResizedHandler(GLFWwindow*, int, int);
+
+
+
+	/*	==============================================
+	*				Input Event Handlers
+	*	==============================================*/
 
 	/*	Invoked when a GLFWwindow receives a button click.
 	*
