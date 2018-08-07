@@ -4,6 +4,7 @@ Debug/
 Release/
 GLApplication.sdf
 GLApplication.v12.suo
+.vs/
 
 #Project Directory "GLApp"
 GLApp/Debug/

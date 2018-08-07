@@ -1,6 +1,7 @@
-#include <GLFW\glfw3.h>
 #include <App/UI/Window/uiWinGLWindow.h>
+
 #include <vector>
+#include <assert.h>
 
 /*	The Window Manager class used by client code to issue
 *	the creation of new windows. The manager tracks a stack
@@ -34,19 +35,6 @@ namespace uiWin
 		Decorated	= GLFW_DECORATED,
 		Floating	= GLFW_FLOATING,
 		AutoIconify	= GLFW_AUTO_ICONIFY
-	};
-
-	enum class EWindowMode
-	{
-		FullScreen	= 0x0,
-		Windowed	= 0x1
-	};
-
-	struct FWindowHandle
-	{
-		GLWindow Window;
-		GLFWwindow* const GlfwHandle;	// We should not be allowed to manipulate windows directly
-
 	};
 }
 
@@ -89,6 +77,15 @@ public:
 	*	Returns if no windows exists.
 	*/
 	void PopWindow();
+
+	/* Adds a new window handle to the top of the stack
+	*  Returns true if addition is valid and successful.
+	*/
+	bool AddWindow(const FWindowHandle&);
+
+	/*	Sets the window mode (Fullscreen or Windowed) for the currently active window.
+	*/
+	void SetWindowMode(EWindowMode);
 
 private:
 	/* GLFW INTERFACE */
@@ -206,7 +203,8 @@ private:
 
 	/* Window Operations */
 
-	inline int16_t FindWindowHandle(const GLFWwindow*) const;
+	// Finds the index in the window stack associated with the specified GLFWwindow handle
+	inline int8_t FindWindowHandle(const GLFWwindow*) const;
 
 	// Toggles specified window hints flags
 	inline void SetWindowHints(EWindowHints);
@@ -214,14 +212,37 @@ private:
 
 private:
 	// Initially at -1, improves caching since it is very likely the same window is being accessed again
-	uint8_t lastAccessedWindow;
+	int8_t currWindow;
 
 	// We allocate our objects statically so that they are located contigously in memory, this gives
 	// us more chances for cache hits. When operating on windows, we either return references or 
 	// "point" to them via array indices.
-	GLWindow windowStack[MAX_WINDOW_COUNT];
+	FWindowHandle windowStack[MAX_WINDOW_COUNT];
 };
 
+
+inline int8_t
+uiWin::Manager::FindWindowHandle(const GLFWwindow* _windowHandle) const
+{
+	assert(MAX_WINDOW_COUNT > 0);
+	assert(windowStack[0].Window != nullptr);
+
+	if (!_windowHandle)
+		return -1;
+
+	if (windowStack[currWindow].GlfwHandle == _windowHandle)
+		return currWindow;
+
+	for (int i = 0 ; i < MAX_WINDOW_COUNT ; i++)
+	{
+		if (windowStack[i].GlfwHandle == _windowHandle)
+			return i;
+	}
+
+	// This state should not occur in hindsight - assert and pursue further analysis
+	assert(false);
+	return -1;
+}
 
 // Bitwise OR operation to allow us to set window hint flags conveniently
 inline uiWin::EWindowHints 
