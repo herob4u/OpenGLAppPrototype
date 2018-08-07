@@ -38,6 +38,7 @@ public:
 	void Update();
 
 	void SetWindowMode(EWindowMode);
+	void Activate() const;
 
 	// Accessors
 	inline const GLFWwindow* GetGlfwWindow() const;
@@ -71,7 +72,7 @@ private:
 
 
 inline const GLFWwindow* uiWin::GLWindow::GetGlfwWindow() const										{ return glfwWindow; }
-inline EWindowMode uiWin::GLWindow::GetWindowMode() const											{ return windowMode; }
+inline uiWin::EWindowMode uiWin::GLWindow::GetWindowMode() const									{ return windowMode; }
 
 inline int uiWin::GLWindow::X() const																{ return posX; }
 inline int uiWin::GLWindow::Y() const																{ return posY; }

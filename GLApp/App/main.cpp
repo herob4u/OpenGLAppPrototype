@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+#include <App/UI/Window/uiWinManager.h>
 
 #include <iostream>
 #include <assert.h>
@@ -9,23 +9,20 @@ void GLErrorCallback(int error, const char* description);
 
 int main()
 {
+	// Create a window manager responsible for spawning and managing windows
+	uiWin::Manager winManager;
+
 	glfwSetErrorCallback(GLErrorCallback);
 
 	// Initialize the OpenGL Application
 	assert(glfwInit() && "GLFW Failed to initialize, execution cannot continue");
 
-	// Actual creation of a window (to be encapsulated)
-	GLFWwindow* window = glfwCreateWindow(640, 640, "Deomar", NULL, NULL);
-	assert(window && "GLFWWindow could not be created, execution cannot continue");
-	glfwMakeContextCurrent(window);
+	winManager.CreateWindow(uiWin::EWindowMode::Windowed);
 
-	while ( !glfwWindowShouldClose(window) )
+	while (1)
 	{
 		glfwPollEvents();
 	}
-
-	// Effectively destroys the current context
-	glfwDestroyWindow(window);
 
 	// Finalize the OpenGL Application
 	glfwTerminate();

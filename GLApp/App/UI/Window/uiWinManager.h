@@ -42,6 +42,7 @@ namespace uiWin
 class uiWin::Manager
 {
 public:
+
 	Manager();
 	~Manager();
 
@@ -71,21 +72,7 @@ public:
 	*	@Param 
 	*/
 	bool CreateSubWindow(GLFWwindow*, int, int);
-	bool CreateSubWindow(GLFWwindow*, int, int);
-
-	/*	Closes and Destroys a window of top of the stack
-	*	Returns if no windows exists.
-	*/
-	void PopWindow();
-
-	/* Adds a new window handle to the top of the stack
-	*  Returns true if addition is valid and successful.
-	*/
-	bool AddWindow(const FWindowHandle&);
-
-	/*	Sets the window mode (Fullscreen or Windowed) for the currently active window.
-	*/
-	void SetWindowMode(EWindowMode);
+	//bool CreateSubWindow(GLFWwindow*, int, int);
 
 private:
 	/* GLFW INTERFACE */
@@ -205,6 +192,20 @@ private:
 
 	// Finds the index in the window stack associated with the specified GLFWwindow handle
 	inline int8_t FindWindowHandle(const GLFWwindow*) const;
+
+	/*	Closes and Destroys a window of top of the stack
+	*	Returns if no windows exists.
+	*/
+	void PopWindow();
+
+	/* Adds a new window handle to the top of the stack
+	*  Returns true if addition is valid and successful.
+	*/
+	bool AddWindow(const FWindowHandle&);
+
+	/*	Sets the window mode (Fullscreen or Windowed) for the currently active window.
+	*/
+	void SetWindowMode(EWindowMode);
 
 	// Toggles specified window hints flags
 	inline void SetWindowHints(EWindowHints);

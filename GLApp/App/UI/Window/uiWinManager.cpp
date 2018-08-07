@@ -22,12 +22,11 @@ bool Manager::CreateWindow(EWindowMode mode,
 						   EWindowHints hints)
 {
 	assert(glfwGetPrimaryMonitor());
+	SetWindowHints(hints);
 
 	int count;
 	const GLFWvidmode* vidMode = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
 
-	// The handle that will be populated and managed
-	FWindowHandle handle;
 	int width = -1;
 	int height = -1;
 
@@ -55,25 +54,22 @@ bool Manager::CreateWindow(EWindowMode mode,
 
 	AddWindow(handle);
 	SetWindowMode(mode);
+	return true;
 }
 
 // Create a GLWindow of specified flags but with specified resolutions. If full screen, the resolution is overriden.
 bool Manager::CreateWindow(int width, int height
-						 , EWindowMode mode = EWindowMode::Windowed
-						 , EWindowHints hints = EWindowHints::Default)
+						 , EWindowMode mode
+						 , EWindowHints hints)
 {
-
+	return false;
 }
 
 bool Manager::CreateSubWindow(GLFWwindow*, int, int)
 {
-
+	return false;
 }
 
-bool Manager::CreateSubWindow(GLFWwindow*, int, int)
-{
-
-}
 
 // Destroy the window on top of the stack and update the indexer
 void Manager::PopWindow()
@@ -87,7 +83,7 @@ void Manager::PopWindow()
 	if (currWindow >= 0)
 	{
 		assert(windowStack[currWindow].IsValid()); // Windows stacked on top of each other CAN NEVER BE INVALID! UNDEFINED BEHAVIOUR
-		glfwMakeContextCurrent(const_cast<GLFWwindow*>(windowStack[currWindow].GlfwHandle));
+		windowStack[currWindow].Window->Activate();
 	}
 }
 
@@ -111,15 +107,16 @@ bool Manager::AddWindow(const FWindowHandle& _handle)
 		assert(windowStack[currWindow].IsValid());
 	}
 
-	// Move the indexer forward to point to the most recent window.
+	// Move the indexer forward to point to the most recent window and activate it
 	currWindow++;
+	_handle.Window->Activate();
 	return true;
 }
 
 void Manager::SetWindowMode(EWindowMode mode)
 {	
-	GLFWwindow* glfwWin = windowStack[currWindow].GlfwHandle;
-	GLWindow* glWin = windowStack[currWindow].Window;
+	GLFWwindow* glfwWin = const_cast<GLFWwindow*>(windowStack[currWindow].GlfwHandle);
+	GLWindow* glWin = const_cast<GLWindow*>(windowStack[currWindow].Window);
 	assert(glfwWin && glWin);
 
 	switch (mode)
@@ -148,3 +145,52 @@ void Manager::SetWindowMode(EWindowMode mode)
 	// Update the window mode in the GLWindow to reflect the change
 	glWin->SetWindowMode(mode);
 }
+
+
+
+
+
+/* GLFW INTERFACE */
+
+/*	==============================================
+*				Window Event Handlers
+*	==============================================*/
+
+
+void Manager::WindowClosedHandler(GLFWwindow*) { printf("Window Close Handler\n"); }
+
+
+void Manager::WindowRefreshHandler(GLFWwindow*){}
+
+
+void Manager::WindowMovedHandler(GLFWwindow*, int, int){}
+
+
+void Manager::WindowResizedHandler(GLFWwindow*, int, int) {}
+
+
+
+/*	==============================================
+*				Input Event Handlers
+*	==============================================*/
+
+void Manager::MouseButtonHandler(GLFWwindow*, int, int, int) {}
+
+
+void Manager::MouseMoveHandler(GLFWwindow*, double, double) { printf("Mouse Move\n"); }
+
+
+void Manager::MouseCursorExitHandler(GLFWwindow*, int) {}
+
+
+void Manager::MouseWheelHandler(GLFWwindow*, double, double) {}
+
+
+void Manager::KeyInputHandler(GLFWwindow*, int, int, int, int) {}
+
+
+void Manager::CharInputHandler(GLFWwindow*, unsigned int) {}
+void Manager::CharModifiersInputHandler(GLFWwindow*, unsigned int, int) {}
+
+
+void Manager::DragDropHandler(GLFWwindow*, int, const char**) {}

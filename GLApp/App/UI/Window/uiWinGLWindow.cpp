@@ -32,14 +32,16 @@ GLWindow::GLWindow(GLFWwindow* glfwWin, int _width, int _height, EWindowMode mod
 	: glfwWindow(glfwWin)
 	, width(_width)
 	, height(_height)
+	, posX(50)
+	, posY(50)
 	, windowMode(mode)
 {
-	printf("GLWindow Constructor");
+	printf("GLWindow Constructor\n");
 }
 
 GLWindow::~GLWindow()
 {
-	printf("~GLWindow");
+	printf("~GLWindow\n");
 
 	// Destroy the OpenGL context first
 	glfwDestroyWindow(glfwWindow);
@@ -55,6 +57,14 @@ void GLWindow::Update()
 	OnPostDraw();
 }
 
+void GLWindow::Activate() const
+{
+	// Every GLWindow must manage a glfwWindow. Calling activate before a GLWindow is 
+	// fully initializes is an invalid call.
+	assert(glfwWindow);
+	glfwMakeContextCurrent(glfwWindow);
+	printf("Activate Called\n");
+}
 
 void GLWindow::OnPreDraw()
 {
