@@ -157,7 +157,10 @@ void Manager::SetWindowMode(EWindowMode mode)
 *	==============================================*/
 
 
-void Manager::WindowClosedHandler(GLFWwindow*) { printf("Window Close Handler\n"); }
+void Manager::WindowClosedHandler(GLFWwindow* window) 
+{ 
+	printf("Window Close Handler\n"); 
+}
 
 
 void Manager::WindowRefreshHandler(GLFWwindow*){}
@@ -194,3 +197,15 @@ void Manager::CharModifiersInputHandler(GLFWwindow*, unsigned int, int) {}
 
 
 void Manager::DragDropHandler(GLFWwindow*, int, const char**) {}
+
+
+/* Event Binding */
+void Manager::BindEventsToWindow(GLFWwindow* window) const
+{
+	glfwSetWindowCloseCallback(window, *&Manager::WindowClosedHandler);
+}
+
+void Manager::UnbindEventsFromWindow(GLFWwindow* window) const
+{
+
+}

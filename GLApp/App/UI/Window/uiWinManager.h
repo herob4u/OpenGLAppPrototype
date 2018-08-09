@@ -187,6 +187,11 @@ private:
 	void DragDropHandler(GLFWwindow*, int, const char**);
 
 	
+	/* Event Binding */
+	void BindEventsToWindow(GLFWwindow*) const;
+	void UnbindEventsFromWindow(GLFWwindow*) const;
+
+	
 
 	/* Window Operations */
 
