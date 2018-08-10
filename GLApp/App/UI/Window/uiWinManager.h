@@ -43,8 +43,15 @@ class uiWin::Manager
 {
 public:
 
-	Manager();
-	~Manager();
+	/*	Retrieves the singleton instance of the ui Manager class
+	*	@Return Manager: Thee singleton manager pointer
+	*/
+	static Manager* Instance();
+
+	// Ultimately, both windows point to non-const data. The const_cast can be used successfully for manipulations,
+	// however, querying client code is expected to respect constness unless necessary.
+	inline const GLWindow* GetActiveWindow() const;
+	inline const GLFWwindow* GetActiveGlfwContext() const;
 
 	/*	Creates a new window and places it on top of the window stack.
 	*	If previous windows existed, they lose focus and ignore events.
@@ -74,6 +81,7 @@ public:
 	bool CreateSubWindow(GLFWwindow*, int, int);
 	//bool CreateSubWindow(GLFWwindow*, int, int);
 
+
 private:
 	/* GLFW INTERFACE */
 
@@ -86,13 +94,13 @@ private:
 	*
 	*	@Param GLFWwindow: The window being closed by the user
 	*/
-	void WindowClosedHandler(GLFWwindow*);
+	static void WindowClosedHandler(GLFWwindow*);
 
 	/*	Invoked when a window request its contents to be refreshed
 	*
 	*	@Param GLFWwindow: The window in need of refreshing
 	*/
-	void WindowRefreshHandler(GLFWwindow*);
+	static void WindowRefreshHandler(GLFWwindow*);
 
 	/*	Invoked when the window is moved by the user
 	*
@@ -100,7 +108,7 @@ private:
 	*	@Param int: The new X-coordinate of the upper left corner of the window
 	*	@Param int: The new Y-coordinate of the upper left corner of the window
 	*/
-	void WindowMovedHandler(GLFWwindow*, int, int);
+	static void WindowMovedHandler(GLFWwindow*, int, int);
 
 	/*	Invoked when the window is resized by either the user or set size func
 	*
@@ -108,7 +116,7 @@ private:
 	*	@Param int: New width of window in screen coordinates
 	*	@Param int: New height of window in screen coordinates
 	*/
-	void WindowResizedHandler(GLFWwindow*, int, int);
+	static void WindowResizedHandler(GLFWwindow*, int, int);
 
 
 
@@ -123,7 +131,7 @@ private:
 	*	@Param int: The code representing the type of action (Press OR Release)
 	*	@Param int: A bit vector representing the modifier keys currently held down
 	*/
-	void MouseButtonHandler(GLFWwindow*, int, int, int);
+	static void MouseButtonHandler(GLFWwindow*, int, int, int);
 
 
 	/*	Invoked when the mouse cursor in a GLFWwindow updates position.
@@ -132,7 +140,7 @@ private:
 	*	@Param int:	The new X-coordinate of the cursor
 	*	@Param int: The new Y-coordinate of the cursor
 	*/
-	void MouseMoveHandler(GLFWwindow*, double, double);
+	static void MouseMoveHandler(GLFWwindow*, double, double);
 
 
 	/*	Invoked when the mouse cursor exits or enters a window
@@ -141,7 +149,7 @@ private:
 	*	@Param int: GLFW_TRUE or GLFW_FALSE indicating whether
 	*				it entered or exited respectively.
 	*/
-	void MouseCursorExitHandler(GLFWwindow*, int);
+	static void MouseCursorExitHandler(GLFWwindow*, int);
 
 
 	/*	Invoked when a scroll occurs (primarily due to a mouse wheel)
@@ -150,7 +158,7 @@ private:
 	*	@Param double: The scroll OFFSET in the X-position
 	*	@Param double: The scroll OFFSET in the Y-position
 	*/
-	void MouseWheelHandler(GLFWwindow*, double, double);
+	static void MouseWheelHandler(GLFWwindow*, double, double);
 
 
 	/*	Invoked when a keyboard button is pressed or released
@@ -161,7 +169,7 @@ private:
 	*	@Param int: The code for action associated with the event (Press,Release,Hold)
 	*	@Param int: A bit vector representing modifier keys currently held.
 	*/
-	void KeyInputHandler(GLFWwindow*, int, int, int, int);
+	static void KeyInputHandler(GLFWwindow*, int, int, int, int);
 
 	
 	/*	[NOT IN USE]
@@ -175,8 +183,8 @@ private:
 	*	@Param unsigned int: The Unicode code representing the character
 	*	@Param int: Bit vector representing modifier keys currently held
 	*/
-	void CharInputHandler(GLFWwindow*, unsigned int);
-	void CharModifiersInputHandler(GLFWwindow*, unsigned int, int);
+	static void CharInputHandler(GLFWwindow*, unsigned int);
+	static void CharModifiersInputHandler(GLFWwindow*, unsigned int, int);
 
 	/*	Invoked when FILE(s) has been dropped unto a window.
 	*
@@ -184,14 +192,13 @@ private:
 	*	@Param int: The number of files dropped
 	*	@Param const char**: An array that contains UTF-8 encoded file paths (null terminated)
 	*/
-	void DragDropHandler(GLFWwindow*, int, const char**);
+	static void DragDropHandler(GLFWwindow*, int, const char**);
 
 	
 	/* Event Binding */
 	void BindEventsToWindow(GLFWwindow*) const;
 	void UnbindEventsFromWindow(GLFWwindow*) const;
 
-	
 
 	/* Window Operations */
 
@@ -216,6 +223,11 @@ private:
 	inline void SetWindowHints(EWindowHints);
 	inline void ResetWindowHints();
 
+
+	/* Manager */
+	Manager();
+	~Manager();
+
 private:
 	// Initially at -1, improves caching since it is very likely the same window is being accessed again
 	int8_t currWindow;
@@ -224,6 +236,8 @@ private:
 	// us more chances for cache hits. When operating on windows, we either return references or 
 	// "point" to them via array indices.
 	FWindowHandle windowStack[MAX_WINDOW_COUNT];
+
+	static Manager* instance;
 };
 
 
@@ -268,4 +282,25 @@ inline void
 uiWin::Manager::ResetWindowHints()
 {
 	glfwDefaultWindowHints();
+}
+
+
+inline const uiWin::GLWindow* 
+uiWin::Manager::GetActiveWindow() const
+{
+	if (currWindow < 0)
+		return nullptr;
+	
+	assert(windowStack[currWindow].IsValid());
+	return windowStack[currWindow].Window;
+}
+
+inline const GLFWwindow* 
+uiWin::Manager::GetActiveGlfwContext() const
+{
+	if (currWindow < 0)
+		return nullptr;
+
+	assert(windowStack[currWindow].IsValid());
+	return windowStack[currWindow].GlfwHandle;
 }

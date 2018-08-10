@@ -25,6 +25,15 @@
     <ClCompile Include="App\UI\Window\uiWinManager.cpp">
       <Filter>App\UI\Window</Filter>
     </ClCompile>
+    <ClCompile Include="App\Support\Delegates\DelegateBase.cpp">
+      <Filter>App\Support\Delegates</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Support\Delegates\DelegateHandler.cpp">
+      <Filter>App\Support\Delegates</Filter>
+    </ClCompile>
+    <ClCompile Include="App\Support\Delegates\Function.cpp">
+      <Filter>App\Support\Delegates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="App\View\ReadMe.txt">
@@ -62,6 +71,12 @@
     <Filter Include="App\UI\Geom">
       <UniqueIdentifier>{97ae27dd-076a-455f-bba3-83748a898ecf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="App\Support">
+      <UniqueIdentifier>{58030357-a263-412d-aa1a-198d23cfbdfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\Support\Delegates">
+      <UniqueIdentifier>{becb1a02-007f-4ccc-82da-c17ae40e7e99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\UI\Events\uiEVEvent.h">
@@ -96,6 +111,15 @@
     </ClInclude>
     <ClInclude Include="App\UI\Window\uiWinManager.h">
       <Filter>App\UI\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Support\Delegates\DelegateBase.h">
+      <Filter>App\Support\Delegates</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Support\Delegates\DelegateHandler.h">
+      <Filter>App\Support\Delegates</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Support\Delegates\Function.h">
+      <Filter>App\Support\Delegates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

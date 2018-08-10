@@ -10,14 +10,14 @@ void GLErrorCallback(int error, const char* description);
 int main()
 {
 	// Create a window manager responsible for spawning and managing windows
-	uiWin::Manager winManager;
+	uiWin::Manager* mgr = uiWin::Manager::Instance();
 
 	glfwSetErrorCallback(GLErrorCallback);
 
 	// Initialize the OpenGL Application
 	assert(glfwInit() && "GLFW Failed to initialize, execution cannot continue");
 
-	winManager.CreateWindow(uiWin::EWindowMode::Windowed);
+	mgr->CreateWindow(uiWin::EWindowMode::Windowed);
 
 	while (1)
 	{

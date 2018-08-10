@@ -2,6 +2,17 @@
 
 using namespace uiWin;
 
+Manager* Manager::instance = nullptr;
+
+Manager* Manager::Instance()
+{
+	if (!instance)
+	{
+		instance = new Manager();
+	}
+	return instance;
+}
+
 Manager::Manager()
 	:currWindow(-1)
 {
@@ -76,6 +87,7 @@ void Manager::PopWindow()
 {
 	assert(windowStack[currWindow].IsValid());
 
+	UnbindEventsFromWindow(const_cast<GLFWwindow*>(windowStack[currWindow].GlfwHandle));
 	GLWindow::Destroy(const_cast<GLWindow*>(windowStack[currWindow].Window));
 	currWindow--;
 
@@ -84,6 +96,7 @@ void Manager::PopWindow()
 	{
 		assert(windowStack[currWindow].IsValid()); // Windows stacked on top of each other CAN NEVER BE INVALID! UNDEFINED BEHAVIOUR
 		windowStack[currWindow].Window->Activate();
+		BindEventsToWindow(const_cast<GLFWwindow*>(windowStack[currWindow].GlfwHandle));
 	}
 }
 
@@ -105,11 +118,17 @@ bool Manager::AddWindow(const FWindowHandle& _handle)
 		assert(!windowStack[currWindow + 1].IsValid());
 		windowStack[currWindow + 1] = _handle;
 		assert(windowStack[currWindow].IsValid());
+
+		// Stop listening to the events of the previous window, as it will become inactive
+		UnbindEventsFromWindow(const_cast<GLFWwindow*>(_handle.GlfwHandle));
 	}
 
-	// Move the indexer forward to point to the most recent window and activate it
+	// Move the indexer forward to point to the most recent window and activate it (context switch)
 	currWindow++;
 	_handle.Window->Activate();
+
+	// If addition is successful, begin to listen to events from this new window.
+	BindEventsToWindow(const_cast<GLFWwindow*>(_handle.GlfwHandle));
 	return true;
 }
 
@@ -160,6 +179,12 @@ void Manager::SetWindowMode(EWindowMode mode)
 void Manager::WindowClosedHandler(GLFWwindow* window) 
 { 
 	printf("Window Close Handler\n"); 
+	Manager* instance = Manager::Instance();
+
+	if (window == instance->GetActiveGlfwContext())
+	{
+		instance->PopWindow();
+	}
 }
 
 
@@ -177,35 +202,77 @@ void Manager::WindowResizedHandler(GLFWwindow*, int, int) {}
 *				Input Event Handlers
 *	==============================================*/
 
-void Manager::MouseButtonHandler(GLFWwindow*, int, int, int) {}
+void Manager::MouseButtonHandler(GLFWwindow*, int btnCode, int actionCode, int modifiers) 
+{ 
+	printf("Mouse Button: %i, %i, %i\n", btnCode, actionCode, modifiers); 
+}
 
 
-void Manager::MouseMoveHandler(GLFWwindow*, double, double) { printf("Mouse Move\n"); }
+void Manager::MouseMoveHandler(GLFWwindow*, double, double) 
+{
+	printf("Mouse Move\n"); 
+}
 
 
-void Manager::MouseCursorExitHandler(GLFWwindow*, int) {}
+void Manager::MouseCursorExitHandler(GLFWwindow*, int) 
+{}
 
 
-void Manager::MouseWheelHandler(GLFWwindow*, double, double) {}
+void Manager::MouseWheelHandler(GLFWwindow*, double, double) 
+{}
 
 
-void Manager::KeyInputHandler(GLFWwindow*, int, int, int, int) {}
+void Manager::KeyInputHandler(GLFWwindow*, int, int, int, int) 
+{}
 
 
-void Manager::CharInputHandler(GLFWwindow*, unsigned int) {}
-void Manager::CharModifiersInputHandler(GLFWwindow*, unsigned int, int) {}
+void Manager::CharInputHandler(GLFWwindow*, unsigned int) 
+{}
+void Manager::CharModifiersInputHandler(GLFWwindow*, unsigned int, int) 
+{}
 
 
-void Manager::DragDropHandler(GLFWwindow*, int, const char**) {}
+void Manager::DragDropHandler(GLFWwindow*, int, const char**) 
+{}
 
 
 /* Event Binding */
 void Manager::BindEventsToWindow(GLFWwindow* window) const
 {
-	glfwSetWindowCloseCallback(window, *&Manager::WindowClosedHandler);
+	printf("Binding Events...\n");
+
+	glfwSetWindowCloseCallback(window, &Manager::WindowClosedHandler);
+	glfwSetWindowRefreshCallback(window, &Manager::WindowRefreshHandler);
+	glfwSetWindowPosCallback(window, &Manager::WindowMovedHandler);
+	glfwSetWindowSizeCallback(window, &Manager::WindowResizedHandler);
+	
+	glfwSetMouseButtonCallback(window, &Manager::MouseButtonHandler);
+	glfwSetCursorPosCallback(window, &Manager::MouseMoveHandler);
+	glfwSetCursorEnterCallback(window, &Manager::MouseCursorExitHandler);
+	glfwSetScrollCallback(window, &Manager::MouseWheelHandler);
+	glfwSetKeyCallback(window, &Manager::KeyInputHandler);
+	glfwSetCharCallback(window, &Manager::CharInputHandler);
+	glfwSetCharModsCallback(window, &Manager::CharModifiersInputHandler);
+
+	glfwSetDropCallback(window, &Manager::DragDropHandler);
 }
 
 void Manager::UnbindEventsFromWindow(GLFWwindow* window) const
 {
+	printf("Unbinding Events...\n");
 
+	glfwSetWindowCloseCallback(window, NULL);
+	glfwSetWindowRefreshCallback(window, NULL);
+	glfwSetWindowPosCallback(window, NULL);
+	glfwSetWindowSizeCallback(window, NULL);
+
+	glfwSetMouseButtonCallback(window, NULL);
+	glfwSetCursorPosCallback(window, NULL);
+	glfwSetCursorEnterCallback(window, NULL);
+	glfwSetScrollCallback(window, NULL);
+	glfwSetKeyCallback(window, NULL);
+	glfwSetCharCallback(window, NULL);
+	glfwSetCharModsCallback(window, NULL);
+
+	glfwSetDropCallback(window, NULL);
 }
