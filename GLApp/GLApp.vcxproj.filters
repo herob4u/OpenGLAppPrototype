@@ -28,12 +28,6 @@
     <ClCompile Include="App\Support\Delegates\DelegateBase.cpp">
       <Filter>App\Support\Delegates</Filter>
     </ClCompile>
-    <ClCompile Include="App\Support\Delegates\DelegateHandler.cpp">
-      <Filter>App\Support\Delegates</Filter>
-    </ClCompile>
-    <ClCompile Include="App\Support\Delegates\Function.cpp">
-      <Filter>App\Support\Delegates</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="App\View\ReadMe.txt">
@@ -115,10 +109,10 @@
     <ClInclude Include="App\Support\Delegates\DelegateBase.h">
       <Filter>App\Support\Delegates</Filter>
     </ClInclude>
-    <ClInclude Include="App\Support\Delegates\DelegateHandler.h">
+    <ClInclude Include="App\Support\Delegates\IDelegate.h">
       <Filter>App\Support\Delegates</Filter>
     </ClInclude>
-    <ClInclude Include="App\Support\Delegates\Function.h">
+    <ClInclude Include="App\Support\Delegates\Delegates.h">
       <Filter>App\Support\Delegates</Filter>
     </ClInclude>
   </ItemGroup>

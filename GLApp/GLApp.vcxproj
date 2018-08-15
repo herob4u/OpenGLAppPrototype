@@ -79,8 +79,6 @@
   <ItemGroup>
     <ClCompile Include="App\main.cpp" />
     <ClCompile Include="App\Support\Delegates\DelegateBase.cpp" />
-    <ClCompile Include="App\Support\Delegates\DelegateHandler.cpp" />
-    <ClCompile Include="App\Support\Delegates\Function.cpp" />
     <ClCompile Include="App\UI\Events\uiEVConstants.cpp" />
     <ClCompile Include="App\UI\Events\uiEventTranslator.cpp" />
     <ClCompile Include="App\UI\Events\uiEVEvent.cpp" />
@@ -91,8 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\Support\Delegates\DelegateBase.h" />
-    <ClInclude Include="App\Support\Delegates\DelegateHandler.h" />
-    <ClInclude Include="App\Support\Delegates\Function.h" />
+    <ClInclude Include="App\Support\Delegates\Delegates.h" />
+    <ClInclude Include="App\Support\Delegates\IDelegate.h" />
     <ClInclude Include="App\UI\Events\uiEVConstants.h" />
     <ClInclude Include="App\UI\Events\uiEventTranslator.h" />
     <ClInclude Include="App\UI\Events\uiEVEvent.h" />
