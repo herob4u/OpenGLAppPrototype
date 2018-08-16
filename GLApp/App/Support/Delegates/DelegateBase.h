@@ -7,6 +7,18 @@ namespace RTB
 	class MemberFunction;
 }
 
+struct Invokation
+{
+	void* InObject;
+	void* FuncPtr;
+
+	template <typename RetType, typename...Args>
+	inline RetType operator ()(Args...args)
+	{
+		// Do void func
+	}
+};
+
 
 class RTB::DelegateBase
 {

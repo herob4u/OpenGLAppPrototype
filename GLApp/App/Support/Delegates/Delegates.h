@@ -5,6 +5,7 @@ namespace RTB
 {
 	class GlobalDelegateVoid;
 	class DelegateVoid;
+	class DelegateTyped;
 }
 
 /* Recall class member function pointer
@@ -25,6 +26,7 @@ namespace RTB
 *	and arbitrary arguments.
 *
 */
+/*
 template<typename...Args>
 class RTB::DelegateVoid : public RTB::DelegateBase
 {
@@ -40,6 +42,70 @@ public:
 private:
 
 };
+*/
+
+/**/
+template<typename Arg1 = void>
+class RTB::DelegateVoid : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(void, Arg1);
+};
+
+template<typename Arg1, typename Arg2>
+class RTB::DelegateVoid : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(void, Arg1, Arg2);
+};
+
+
+template<typename Arg1, typename Arg2, typename Arg3>
+class RTB::DelegateVoid : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(void, Arg1, Arg2, Arg3);
+};
+
+template<typename Arg1, typename Arg2, typename Arg3, typename Arg4>
+class RTB::DelegateVoid : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(void, Arg1, Arg2, Arg3, Arg4);
+};
+
+
+
+
+template<typename RetType, typename Arg1 = void>
+class RTB::DelegateTyped : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(RetType, Arg1);
+};
+
+template<typename RetType, typename Arg1, typename Arg2>
+class RTB::DelegateTyped : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(RetType, Arg1, Arg2);
+};
+
+template<typename RetType, typename Arg1, typename Arg2, typename Arg3>
+class RTB::DelegateTyped : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(RetType, Arg1, Arg2, Arg3);
+};
+
+template<typename RetType, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
+class RTB::DelegateTyped : public RTB::DelegateBase
+{
+	GENERATE_DELEGATE_BODY(RetType, Arg1, Arg2, Arg3, Arg4);
+};
+
+
+
+// Takes in the template arguments and generates the internal class code for the delegate
+#define GENERATE_DELEGATE_BODY(RetType, ...) \
+	public: \
+	typedef RetType(*FuncPtr)(__VA_ARGS__);\
+	inline void AddRaw(FuncPtr func);\
+	template<typename InClass>\
+	inline void AddMember(InClass* InObject, RetType(InClass::*)(__VA_ARGS__));\
 
 
 /*	Creates a delegate with name Name and void 
