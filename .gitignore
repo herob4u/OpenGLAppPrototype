@@ -1,5 +1,5 @@
-GLEW/
-GLFW/
+#GLEW/
+#GLFW/
 Debug/
 Release/
 GLApplication.sdf
